@@ -1,0 +1,110 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #80ffff;
+  padding: 1rem;
+}
+
+main {
+  max-width: 10000px;
+  margin: 0;
+}
+
+article {
+  margin: 0;
+}
+
+a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+#container {
+  background-color: #fffcdd;
+  width: 80%;
+  margin: 0 auto;
+  border: 5px solid grey;
+  outline: solid 2px black;
+}
+
+#comment {
+  background-color: rgb(25, 186, 226);
+  color: black;
+  font-family: aerial;
+  font-style: italic;
+  font-size: large;
+  padding: 10px 50px;
+}
+
+#header {
+  margin: 0 auto;
+
+  top: 0px;
+  background-color: #e81408;
+  color: white;
+  text-align: center;
+  padding: 1px 0px;
+  outline: solid 2px black;
+}
+
+#footer {
+  width: 100%;
+  padding: 20px;
+  background-color: #666666;
+  color: white;
+  text-align: right;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  font-family: Avenir, Roboto, Helvetica, san-serif;
+  font-size: 80%;
+}
+
+.chapter {
+  display: flex;
+  flex-flow: column;
+  border: 1px solid black;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.pic {
+  padding: 0;
+  width: 18em;
+  height: 18em;
+  object-fit: cover;
+}
+
+.chapter > h1 {
+  margin: 1rem 1rem 0;
+}
+
+.chapter > ul {
+  margin: 0 0 1rem;
+}
+
+.chapter > p {
+  margin: 0.23em 1rem 1rem;
+}
+
+.chapter > img {
+  order: -1;
+  align-self: center;
+}
+
+.chapter > button {
+  margin-top: auto;
+  background: teal;
+  color: white;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1.2rem;
+}
