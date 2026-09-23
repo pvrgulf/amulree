@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cambo Estate Walks — Woodland Circular Walk</title>
+<style>
+:root{--bg:#171916;--panel:#242822;--ink:#f4f1e8;--muted:#b9b7ad;--accent:#d7c9a4}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+body{display:flex;flex-direction:column}
+header{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--panel);border-bottom:1px solid #3b4039;flex:0 0 auto}
+.brand{display:flex;flex-direction:column}.title{font-weight:650;letter-spacing:.2px;font-size:15px}.subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+.actions{display:flex;gap:7px}.btn{border:1px solid #50564d;background:#30352f;color:var(--ink);border-radius:7px;padding:8px 11px;cursor:pointer;font-size:13px}.btn:hover{background:#3a4038}.btn:disabled{opacity:.4;cursor:not-allowed}
+main{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:18px 64px 60px}
+.stage{position:relative;width:min(1180px,94vw);height:min(79vh,800px);display:flex;align-items:center;justify-content:center}
+.spread{height:100%;display:flex;align-items:stretch;justify-content:center;gap:0;filter:drop-shadow(0 8px 24px rgba(0,0,0,.42));transition:opacity .22s ease,transform .22s ease}
+.spread.single{width:auto}.spread.double{width:100%;max-width:1160px}
+.page{height:100%;background:#fff;overflow:hidden;position:relative}.single .page{width:auto;aspect-ratio:210/297}.double .page{width:50%;max-width:580px;aspect-ratio:210/297}
+.page img{width:100%;height:100%;object-fit:contain;display:block;background:white}
+.page.left{border-radius:3px 0 0 3px}.page.right{border-radius:0 3px 3px 0}.double .page:first-child{box-shadow:inset -8px 0 12px -12px rgba(0,0,0,.8)}.double .page:last-child{box-shadow:inset 8px 0 12px -12px rgba(0,0,0,.8)}
+.gutter{position:absolute;left:50%;top:0;height:100%;width:2px;background:rgba(0,0,0,.11);transform:translateX(-1px);display:none}.double .gutter{display:block}
+.nav{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;pointer-events:none}.nav button{pointer-events:auto;width:46px;height:76px;border:0;border-radius:10px;background:rgba(0,0,0,.44);color:#fff;font-size:32px;cursor:pointer;margin:0 5px}.nav button:hover{background:rgba(0,0,0,.66)}
+footer{position:absolute;bottom:0;left:0;right:0;height:52px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;pointer-events:none}.footer-inner{pointer-events:auto;display:flex;align-items:center;gap:10px;background:rgba(36,40,34,.95);border:1px solid #3b4039;border-radius:20px;padding:5px 10px}.progress{width:150px;height:4px;background:#4a4e48;border-radius:4px;overflow:hidden}.bar{height:100%;width:0;background:var(--accent);transition:width .2s}.hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:11px;color:#8f938b;white-space:nowrap}
+@media(max-width:700px){header{height:52px;padding:0 10px}.subtitle{display:none}.title{font-size:13px}.btn{padding:7px 9px}.btn.text{display:none}main{padding:10px 46px 48px}.stage{width:96vw;height:74vh}.double .page{width:50%}.nav button{width:38px;height:62px;margin:0 1px}.hint{display:none}}
+@media(max-width:430px){.double .page{width:50%}main{padding-left:39px;padding-right:39px}.nav button{width:34px;height:56px;font-size:27px}}
+@media(prefers-reduced-motion:reduce){.spread{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="title">Cambo Estate Walks — Woodland Circular Walk</div><div class="subtitle">Monday Walking Group · September 2026</div></div>
+  <div class="actions"><button class="btn text" id="first">First</button><button class="btn" id="pdf">PDF</button><button class="btn" id="full">Fullscreen</button></div>
+</header>
+<main>
+  <div class="stage" id="stage">
+    <div class="spread" id="spread" aria-live="polite"></div>
+    <div class="gutter" aria-hidden="true"></div>
+    <div class="nav"><button id="prev" aria-label="Previous spread">‹</button><button id="next" aria-label="Next spread">›</button></div>
+  </div>
+  <footer>
+    <div class="footer-inner"><span id="count">Cover · 1 of 4</span><div class="progress"><div class="bar" id="bar"></div></div></div>
+    <div class="hint">← → or swipe · Cover, then two-page spreads</div>
+  </footer>
+</main>
+<script>
+const spreads=[
+  [1],
+  [2,3],
+  [4,5],
+  [6,7]
+];
+let current=0;
+const spread=document.getElementById('spread');
+function render(){
+  spread.style.opacity='0';
+  spread.style.transform='translateY(3px)';
+  setTimeout(()=>{
+    spread.className='spread '+(spreads[current].length===1?'single':'double');
+    spread.innerHTML=spreads[current].map((n,i)=>`<div class="page ${i===0?'left':'right'}"><img src="pages/page-${n}.jpg" alt="Booklet page ${n}"></div>`).join('');
+    spread.style.opacity='1';spread.style.transform='translateY(0)';
+    document.getElementById('count').textContent=current===0?'Cover · 1 of 4':`Pages ${spreads[current][0]}–${spreads[current][1]} · ${current+1} of 4`;
+    document.getElementById('bar').style.width=(current/(spreads.length-1)*100)+'%';
+    document.getElementById('prev').disabled=current===0;document.getElementById('next').disabled=current===spreads.length-1;
+  },90);
+}
+function next(){if(current<spreads.length-1){current++;render()}}
+function prev(){if(current>0){current--;render()}}
+function first(){current=0;render()}
+document.getElementById('next').onclick=next;document.getElementById('prev').onclick=prev;document.getElementById('first').onclick=first;
+document.getElementById('pdf').onclick=()=>location.href='walk.pdf';
+document.getElementById('full').onclick=()=>document.documentElement.requestFullscreen?.();
+document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}if(e.key==='Home')first()});
+let sx=0;document.getElementById('stage').addEventListener('touchstart',e=>sx=e.changedTouches[0].screenX,{passive:true});document.getElementById('stage').addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-sx;if(Math.abs(dx)>40)(dx<0?next:prev)()},{passive:true});
+render();
+</script>
+</body>
+</html>
